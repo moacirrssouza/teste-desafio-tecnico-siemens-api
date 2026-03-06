@@ -1,0 +1,14 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/BookManagementSystem.Api/BookManagementSystem.Api/BookManagementSystem.Api.csproj" />
+    <Project Path="src/BookManagementSystem.Application/BookManagementSystem.Application/BookManagementSystem.Application.csproj" />
+    <Project Path="src/BookManagementSystem.Domain/BookManagementSystem.Domain/BookManagementSystem.Domain.csproj" />
+    <Project Path="src/BookManagementSystem.Infrastructure/BookManagementSystem.Infrastructure/BookManagementSystem.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/test/">
+    <Project Path="tests/BookManagementSystem.Tests/BookManagementSystem.Tests.csproj" />
+  </Folder>
+  <Project Path="docker-compose.dcproj">
+    <Build />
+  </Project>
+</Solution>

@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: bookmanagementsystem_postgres
+    environment:
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      POSTGRES_DB: ${DB_NAME:-BookManagementSystem}
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - bookmanagementsystem_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  bookmanagementsystem.api:
+    image: ${DOCKER_REGISTRY-}bookmanagementsystemapi
+    container_name: bookmanagementsystem_api
+    build:
+      context: .
+      dockerfile: src/BookManagementSystem.Api/BookManagementSystem.Api/Dockerfile
+    ports:
+      - "${API_PORT:-8080}:8080"
+    environment:
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=${DB_NAME:-BookManagementSystem};Username=${DB_USER:-postgres};Password=${DB_PASSWORD:-postgres};
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT:-Development}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - bookmanagementsystem_network
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  bookmanagementsystem_network:
+    driver: bridge
